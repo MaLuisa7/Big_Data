@@ -74,19 +74,22 @@ most_occur = Counter.most_common(50)'''
 
 ################################################################################ MOD
 pct10 = int(len(df)*.01)
+pct_sample = int(pct10*.1)
 
 
 #split data into train y test 
 df_4 = df.query("target == 4").reset_index(drop=True).iloc[:pct10,[0,-1]] #(800000, 6)
 df_0= df.query("target == 0").reset_index(drop=True).iloc[:pct10,[0,-1]]   #(800000, 6)
-
+print(len(df_4), len(df_0))
 num_samples_train = int(pct10*.80)
 
 df_4_train = df_4.iloc[:num_samples_train,:]  
 df_4_test = df_4.iloc[num_samples_train:,:] 
 df_0_train = df_0.iloc[:num_samples_train,:]  
-df_0_test = df_0.iloc[num_samples_train:,:] 
+df_0_test = df_0.iloc[num_samples_train:,:]
 
+  
+print(len(df_4_train), len(df_4_test))
 
 x_train_4 = df_4_train.text
 x_train_0 = df_0_train.text

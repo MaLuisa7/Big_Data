@@ -69,24 +69,32 @@ plt.show()
 
 
 Counter = Counter(textt.split())
-most_occur = Counter.most_common(50)
+most_occur = Counter.most_common(10)
 '''
 ################################################################################ MOD
 pct10 = int(len(df)*.01)
+pct_sample = int(pct10*.1)
+
 
 #split data into train y test 
-df_4 = df.query("target == 4").reset_index(drop=True).iloc[:pct10,[0,-1]] #(800000, 6)
-df_0= df.query("target == 0").reset_index(drop=True).iloc[:pct10,[0,-1]]   #(800000, 6)
+df_4 = df.query("target == 4").reset_index(drop=True).sample(n=pct10, replace=True, random_state=7).iloc[:,[0,-1]]
+df_0= df.query("target == 0").reset_index(drop=True).sample(n=pct10, 
+                                                            replace=True, random_state=7).iloc[:,[0,-1]]   #(800000, 6)
+print(len(df_4), len(df_0))
 
-df4_sample = df_4.sample(n=pct10, replace=True, random_state=7)
-df0_sample = df_0.sample(n=pct10, replace=True, random_state=7)
+df4_sample = df_4.sample(n=pct_sample, replace=True, random_state=7)
+df0_sample = df_0.sample(n=pct_sample, replace=True, random_state=7)
+print(len(df4_sample), len(df0_sample))
+
 
 num_samples_train = int(pct10*.80)
+num_samples_test = int(pct10*.20)
 
-df_4_train = df_4.iloc[:num_samples_train,:]  
-df_4_test = df_4.iloc[num_samples_train:,:] 
-df_0_train = df_0.iloc[:num_samples_train,:]  
-df_0_test = df_0.iloc[num_samples_train:,:] 
+
+df_4_train = df_4.sample(n=num_samples_train, replace=False, random_state=7)
+df_4_test = df_4.sample(n=num_samples_test, replace=False, random_state=7)
+df_0_train = df_0.sample(n=num_samples_train, replace=False, random_state=7) 
+df_0_test = df_0.sample(n=num_samples_test, replace=False, random_state=7)
 
 
 x_train_4 = df_4_train.text
